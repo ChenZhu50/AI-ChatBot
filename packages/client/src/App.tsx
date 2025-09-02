@@ -11,11 +11,12 @@ function App() {
    }, []);
 
    return (
-      <div className="p-4">
+      <div   className="p-4">
+        
          <p className="font-bold text-3xl">{message}</p>
-         <Button onClick={() => alert('Button clicked!')}> Click me</Button>
+         <Button onClick={() => alert('Button clicked!!')}> Click me</Button>
       </div>
-   );
+   )
 }
 
 export default App;
