@@ -10,9 +10,7 @@ function App() {
   }, [])
 
   return (
-    <div>
-      <h1>{message}</h1>
-    </div>
+    <p className="font-bold p-4 text-3xl">{message}</p>
   )
 }
 
