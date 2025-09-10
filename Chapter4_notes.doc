@@ -1,0 +1,24 @@
+Building a Chatbot
+
+2. 选取合适的AI和如何调用
+ 1. 用bun下载openai 来调用
+ 2.用new OpenAI实例的方法来赋值apiKey（从env file中）
+ 3. OpenAI这个实例 赋值到一个client变量中
+
+ 接受用户提供的prompt：
+ 1. 使用post function 因为我们不只是接受，还要传输用户给予的prompt给到服务器。
+ 2. 提取用户的req body中的prompt（使用destrcutor的方法得到prompt）
+ 3. 用client.responses.create 方法选择模型，input和其他必要参数
+ 注意：因为是要发送给服务器，所以需要await服务器返回结果。
+ 将得到的结果赋值到response 然后用res.json的方式返回output_text.
+
+ adding a middleware function
+ 为什么需要：中间件就是拦截器/处理器，可以在客户端请求和服务端响应的过程中，执行一些逻辑（比如解析数据、日志记录、权限验证等）。
+ 在本节课中app.use(express.json()); 就是中间件
+ 其作用是：
+    自动把客户端请求体中的 JSON 字符串解析成 JavaScript 对象
+    这样你就可以直接通过 req.body 访问数据，而不用手动解析
+
+ 如果这个middleware不存在的话，就会导致prompt这个变量不存在
+
+Testing the API：
