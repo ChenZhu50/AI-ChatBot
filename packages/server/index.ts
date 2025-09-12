@@ -3,7 +3,7 @@ import type { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 
-dotenv.config();
+dotenv.config(); // Load environment variables from .env file
 
 const client = new OpenAI({
    apiKey: process.env.OPENAI_API_KEY,
@@ -14,7 +14,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 app.get('/', (req: Request, res: Response) => {
-   res.send('Hello, World!');
+   res.send(process.env.OPENAI_API_KEY);
 }); //response to root
 
 app.get('/api/hello', (req: Request, res: Response) => {

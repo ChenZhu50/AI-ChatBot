@@ -22,3 +22,30 @@ Building a Chatbot
  如果这个middleware不存在的话，就会导致prompt这个变量不存在
 
 Testing the API：
+ 1. 我们使用post man作为fake网页发送请求，查看接收到的请求的状态等信息。
+ 2.我们需要接入Open AI的API 其方法如下
+  首先我们需要去到https://platform.openai.com/docs/models 完成登录和添加fund
+  比较模型
+  设置max token来控制输出的窗口长度。
+  设置temp来控制创意程度，温度越高约混乱
+  设置top p来决定我们要选择前百分之多少的选项。
+
+    temp和top_p都是来控制randomness的，
+    我们一般只改变其中之一，
+    如果不确定，我们应该保持top_p为1 调整temp
+
+ 3. 创建API key：
+    回归到index.ts中加入环境变量
+     在powershell中我们应该使用 setx OPENAI_API_KEY "your_api_key_here"
+     在我们server.env file中我们需要设置我们的API_key,这里是真实的。
+     在index.ts中我们必须import dotenv from 'dotenv';
+     以及： dotenv.config(); 来加载 env环境。
+
+     总结：环境变量不是加在你的电脑上的，而是在你当前工程文件中，但该工程文件并不会被git上传。
+     注意：所以你应该同时包括一个.env.example的文件告诉别人如何设置他们自己的.env文件。
+
+4. 此时你就可以用post man的post方法发送请求到 http://localhost:3000/api/chat 使用修改raw为json格式，发送问题得到回复了。
+    {
+        "prompt":"what is the capital of France?"
+
+    }
