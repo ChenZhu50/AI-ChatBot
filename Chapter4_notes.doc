@@ -49,3 +49,33 @@ Testing the API：
         "prompt":"what is the capital of France?"
 
     }
+
+Managing Conversation State:
+    目前我们的APP是没有上下文记忆功能的，本节的内容是让APP可以记住我们之前问了什么问题
+    
+    方法1：调用回答的ID
+     设置previous question变量来存储，其type应该是String或者null
+     每次获得respose之后更新这个变量 last_response_id = response.id
+     并在每次发送请求体的时候，提供previous_response_id
+
+     存在的问题是：我们只能追踪上一个问题，对于所有user。
+     但现实情况是一个user可以有多个conversation，同时还可以有多个user
+
+    方法2：使用Map，或者dictionary
+    映射关系如下：
+        conversation 1 -> last_response_id_1
+        conversation 2 -> last_response_id_2
+
+    使用new Map<string, string>();
+
+    在请求体（req.body）中我们存在conversationId,使用和获得prompt相同的方式就可以
+
+    使用.set方法更新map 键值分别是conversationId，response.id
+    
+    发送的请求体也变更成为.get方法获取conversionId
+
+    在现实中，我们是将这些信息存入数据库，但目前来说不需要。
+
+    注：请求体中的变量名都是确定的，而不是随便起的。
+    比如: previous_response_id:conversation.get(conversationId)
+    而不是：conversation：conversation.get(conversationId)
