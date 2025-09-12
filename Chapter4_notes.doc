@@ -93,3 +93,10 @@ Input Validation:
     将得到的对象包装到一个变量里面，然后检查其是否是success的，如果不是则
     res.status(400).json({ errors: parseResult.error.format() });
     让用户知道其错误在哪。
+
+Error Handling:
+    我们的服务器会因为各种原因无法访问，但当其出现时，我们不希望看到一个html写满了报错的问题
+    此时我们就可以使用 try catch方法来捕捉error，并设置标准返回信息。
+    在try中 我们包含所有需要访问服务器需要进行的程序（不包含zod的schma）
+    catch中设置返回请求的状态为500标志内部服务器错误
+    和一个json（{error：错误原因}）

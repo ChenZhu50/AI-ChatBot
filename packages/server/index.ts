@@ -42,17 +42,22 @@ app.post('/api/chat', async (req: Request, res: Response) => {
       return;
    }
 
-   const { prompt, conversationId } = req.body;
-
-   const response = await client.responses.create({
-      model: 'gpt-4o-mini',
-      input: prompt,
-      temperature: 0.2,
-      max_output_tokens: 100,
-      previous_response_id: conversation.get(conversationId),
-   });
-   conversation.set(conversationId, response.id);
-   res.json({ message: response.output_text });
+   try {
+      const { prompt, conversationId } = req.body;
+      const response = await client.responses.create({
+         model: 'gpt-4o-mini',
+         input: prompt,
+         temperature: 0.2,
+         max_output_tokens: 100,
+         previous_response_id: conversation.get(conversationId),
+      });
+      conversation.set(conversationId, response.id);
+      res.json({ message: response.output_text });
+   } catch (error) {
+      res.status(500).json({
+         error: 'An error occurred while processing your request.',
+      });
+   }
 });
 
 // Start the server
