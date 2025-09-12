@@ -79,3 +79,17 @@ Managing Conversation State:
     注：请求体中的变量名都是确定的，而不是随便起的。
     比如: previous_response_id:conversation.get(conversationId)
     而不是：conversation：conversation.get(conversationId)
+
+Input Validation:
+    我们不能指望用户能给我们正确的输入，我们需要限制用户
+    我们需要使用zod。
+
+    还是在index中我们import zod
+    zod的使用只需要设置schema常数，然后用zod的object方法来设置你需要参数的格式信息
+    比如：是否trim，最短，最长等
+
+    之后在post请求中，应该首先检查schema是否safe。
+    chatSchema.safeParse(req.body)
+    将得到的对象包装到一个变量里面，然后检查其是否是success的，如果不是则
+    res.status(400).json({ errors: parseResult.error.format() });
+    让用户知道其错误在哪。
