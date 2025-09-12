@@ -147,3 +147,28 @@ Error Handling:
 3.5 Extracting Router
     现在index.ts还好，没有很多router，但是未来会有很多，所以可以建立一个router file
     具体实现方式直接看代码就行，没有什么fancy的。
+
+4.1 & 4.2 handling form submission:
+    4.1没什么好说的，你让AI来做雏形就行
+    4.2我们新加入了一个react-hook-form的包来帮助我们submit form
+    const { register, handleSubmit, reset, formState } = useForm<FormData>();
+    
+    register就是说我们要交上去什么东西
+    因为其是一个对象，所以需要...register 这样才可以保证其他属性也被copy
+    我们需要定义FormData有什么
+    比如当前 form data就只有prompt其是一个string
+    看register这个方法，后面可以跟{}来指定需要的validation
+
+    handleSubmit方法中需要提供一个arrow function
+    这个function可以被提取出来，目前我们只需要在console中log 输入的data就可以了
+    同时记得要reset
+
+    在提交form时，我们希望按下回车键（不同时按下shift）会自动提交
+    此时就需要用到onKeyDown方法
+
+    我们也可以将onKeyDown提取出来，但是需要明确e的类型，因为它不确定自己属于哪里了
+    同时 default行为是 按下回车就会自动开启新的一行，这一点是我们不希望的。
+    所以prevent
+
+    在button部分，我们希望如果formState不是valid就不开放
+    
