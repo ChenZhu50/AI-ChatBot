@@ -100,3 +100,28 @@ Error Handling:
     在try中 我们包含所有需要访问服务器需要进行的程序（不包含zod的schma）
     catch中设置返回请求的状态为500标志内部服务器错误
     和一个json（{error：错误原因}）
+
+
+3.1 Refactoring the BackEnd
+    为了能够更好的分层，我们需要首先了解back end 到底是如何应该怎么分层
+        顶层: controllers | gateway 用于接收HTTP请求，和返回 HTTP响应体
+        中层：services | Application logic 比如叫OPENAI的api就属于这一层的
+        底层：repositories | data 用于存储数据。
+
+3.2 extracting conversation repository：
+    对于我们在3.1聊到的layer，我们永远是由上到下，
+        例如顶层可以与中层对话，但底层无法与顶层对话。
+    我们本次只调整我们的repository
+
+    我们目前的代码中MAP 和更新map的代码就属于repository层的。
+
+    首先先提取出MAP这个代码，以及其更新获取方式到server下的repositories文件夹中的conversation.repository.ts中加入环境变量
+    因为我们这是implementation detail，我们并不需要对外暴露，我们使用的是map方法
+    因此不需要export整个conversation这个map，而是创建一些新的function，然后export这些function
+    例如，get，set等
+
+    但是如果你只这么做的话，会导致在index这个文件夹中，看代码的人并不知道getLastResponseId和 setLastResponsedID是repository的function
+    这时候，我们就需要定义一个对象叫做conversationRepository，其中包含这两个function
+    这样在外部调用的时候会调用这个对象的方法，这样就清晰了。
+
+3.3 Extracting chat service
