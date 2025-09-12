@@ -144,4 +144,6 @@ Error Handling:
 
     同时我们应该调整chat的schema也到这里面
 
-
+3.5 Extracting Router
+    现在index.ts还好，没有很多router，但是未来会有很多，所以可以建立一个router file
+    具体实现方式直接看代码就行，没有什么fancy的。
