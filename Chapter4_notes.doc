@@ -137,4 +137,11 @@ Error Handling:
     然后修改sendMessage方法使其promist可以返回一个ChatResponse函数。
 
     这样的话当我们需要修改LLM模型时，只需要更新return后面message的方法就可以了
-    
+
+3.4 extracting chat Controller
+    现在，我们希望把arrow function里面剩下的内容单独提取到一个controller中
+    这样我们只需要post调用这一个方法就可以
+
+    同时我们应该调整chat的schema也到这里面
+
+
