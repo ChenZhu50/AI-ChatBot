@@ -125,3 +125,16 @@ Error Handling:
     这样在外部调用的时候会调用这个对象的方法，这样就清晰了。
 
 3.3 Extracting chat service
+    这一次我们的implement detail就是这个OPENAI的api key调用了
+    剩下的send Message方法我们可以直接包装进chatService中。
+
+    但是需要注意，如果我们就这么结束了，这是一个leaky abstraction
+    因为在外部调用时，我们会使用response.output_text
+    这是openAI独有的调用方法
+    
+    所以为了解决这个问题，我们可以创建一个interface对象
+    其中包含message和id
+    然后修改sendMessage方法使其promist可以返回一个ChatResponse函数。
+
+    这样的话当我们需要修改LLM模型时，只需要更新return后面message的方法就可以了
+    
