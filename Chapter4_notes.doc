@@ -171,4 +171,11 @@ Error Handling:
     所以prevent
 
     在button部分，我们希望如果formState不是valid就不开放
-    
+
+4.3 calling the BackEnd
+    调用axios的post方法，传递给指定url需要的信息，这里是prompt和conversationID
+
+    注意：因为是要发送给服务器，所以需要async，同时让reset提前
+    conversationID需要创建独立Ref，所以要用这个方式创建
+    const conversationId = useRef(crypto.randomUUID());
+    调用时，使用.current

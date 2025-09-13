@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useRef, type KeyboardEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from './ui/button';
 import { FaArrowUp } from 'react-icons/fa';
@@ -7,17 +9,22 @@ type FormData = {
 };
 
 const ChatBot = () => {
+   const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
 
-   const onSubmit = (data: FormData) => {
-      console.log(data);
+   const onSubmit = async ({ prompt }: FormData) => {
       reset();
+      const { data } = await axios.post('/api/chat', {
+         prompt,
+         conversationId: conversationId.current,
+      });
+      console.log(data);
    };
 
    //when we take this onKeyDown function out
    //we need to explicitly say what type is our e
    //since inside form element, e is for sure a form event
-   const onKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+   const onKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
          handleSubmit(onSubmit)();
          e.preventDefault();
