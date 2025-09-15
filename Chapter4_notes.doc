@@ -203,3 +203,49 @@ Error Handling:
     但是server的response会覆盖，我们之前的回复，因为...message每次都是空的
 
     所以我们要用arrow function来指定谁是prev
+
+    ChatGPT解释：
+        非函数式写法（setMessage([...message, something])）
+
+            就好像你拍了一张 旧照片（当时的 message），
+            然后在这张照片上涂一笔，把它交给 React。
+
+            等 React 真正去用的时候，它只能用这张旧照片，
+            所以如果你再交一次“旧照片 + 另一笔”，
+            React 还是基于旧照片，前一笔就会被覆盖掉。
+
+        函数式写法（setMessage(prev => [...prev, something])）
+
+            你不是交“旧照片”，
+            而是交一条 加工说明书：“拿到最新的照片，再加一笔”。
+
+            React 每次要更新时，都会去看最新的照片，
+            然后按照你的说明书再画上去。
+            这样无论更新多少次，之前的笔迹都不会丢。
+
+    这与react的强制刷新有关系，react并不是在你set完后就会更新state，而是在每次render后。
+    所以你这次设置了message，然后在当前这个loop中，你发给服务器的是没有设置过的。所以服务器会覆盖你的回复
+    setMessage([...message, prompt])   // 把“[prompt]”放进更新队列；闭包里的 message 仍是 []
+    await axios.post(...)              // 暂停；闭包里的 message 仍是 []
+    setMessage([...message, data])     // 仍基于 [] 计算出 [data] → 覆盖掉 [prompt]
+
+4.5 Styling messages：
+    我们现在看起来不像是一个conversation。所以我们让我们的prompt在左边，回复在右边
+
+    设置一个message类型，content就是string
+    但我们设置role：user或者bot
+
+    所以此时message更新的就是message state了，他需要同时更新content和role
+
+    那么当set的时候，message就是{prompt和role： “——————”}
+
+    更新HTML的部分，我们更新的就是message.content了。
+
+    也给其一个className的css
+    比如px-3 py-1 然后根据role来决定背景和位置
+    使用${
+        来写你的js code（判断role和决定颜色 和位置）
+    }
+
+    同时为了让回复和问题不粘在一起，我们需要flex 和 gap
+
