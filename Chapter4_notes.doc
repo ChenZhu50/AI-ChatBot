@@ -395,8 +395,34 @@ Error Handling:
     用创建const的方法，手动的添加className。
     
     具体方法可以去看TypingIndictor.tsx
-    
 
+5.3 Extracting chat Message:
+    chatMessage内容还挺多的因为其耦合度高
+
+    refac 快捷方式创建一个file
+
+    1. 先将html那部分抽离出来，直接赋值到chatMessage的return中
+    2. import必须的包。
+    3. 将onCopy部分直接抄下来，记住不能直接给ClipboardEvent，而是用react的方法
+        因为react会包装一次，确保onCopy有内容
+    4.将use Effect也抓过来
+
+    5. 此时你会发现对话框占据了整个屏幕，因为我们return的时候 是个div，div自动占据整个页面
+        所以你需要加上flex，flex-col
+
+    6.在之前的chatBot文件中，需要将拿走的Message[] import回来
+
+    记住使用Props，不然会出问题，使用方法如下：
+    export type Message = {
+    role: 'user' | 'bot';
+    content: string;
+    };
+
+    type Props = {
+    messages: Message[];
+    };
+
+    const ChatMessage = ({ messages }: Props) => {...}
 
 
 
