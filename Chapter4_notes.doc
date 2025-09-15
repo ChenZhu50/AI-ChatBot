@@ -313,6 +313,26 @@ Error Handling:
 
         如果这个 <form> 已经在页面里存在了（即 current 不为 null），就调用它的 scrollIntoView 方法。
 
+4.9 improving copy behaviour
+    现在当我们copy的时候，会copy下来很多HTML的元素（不显示）。
+    所以我们可以设置onCopy function来trim。
+
+    首先阻止默认逻辑：直接放入剪切板
+    再给我们之前得到的section 放回我们的clipboard（setData function）
+
+    在这里，我们并没有明确事件目标是谁，也就是说谁来都一样。
+    但是我们在其他的地方，可以用<>的方式来指定我们只看谁
+    比如
+    if (e.target instanceof HTMLParagraphElement) {
+    // 只允许从 <p> 标签复制
+    }
+        知道 target 的作用在于：
+
+        让复制逻辑更有针对性（不同元素，不同处理）。
+
+        提高用户体验和安全性。
+
+
 
 
 
