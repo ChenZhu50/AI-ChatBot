@@ -21,18 +21,18 @@ type Message = {
 const ChatBot = () => {
    const [messages, setMessages] = useState<Message[]>([]);
    const [isBotTyping, setIsBotTyping] = useState(false);
-   const formRef = useRef<HTMLFormElement>(null);
+   const lastMessageRef = useRef<HTMLDivElement>(null);
    const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
 
    useEffect(() => {
-      formRef.current?.scrollIntoView({ behavior: 'smooth' });
+      lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
    }, [messages, isBotTyping]);
 
    const onSubmit = async ({ prompt }: FormData) => {
       setMessages((prev) => [...prev, { role: 'user', content: prompt }]);
       setIsBotTyping(true);
-      reset();
+      reset({ prompt: '' });
       const { data } = await axios.post<ChatResponse>('/api/chat', {
          prompt,
          conversationId: conversationId.current,
@@ -59,12 +59,13 @@ const ChatBot = () => {
       }
    };
    return (
-      <div>
-         <div className="flex flex-col gap-4 mb-4">
+      <div className="flex flex-col h-full">
+         <div className="flex flex-col flex-1 gap-4 mb-4 overflow-y-auto">
             {messages.map((msg, index) => (
-               <p
+               <div
                   key={index}
                   onCopy={onCopyMessage}
+                  ref={index === messages.length - 1 ? lastMessageRef : null}
                   className={`px-3 py-1 rounded-3xl max-w-[70%] whitespace-pre-wrap
                   ${
                      msg.role === 'user'
@@ -73,7 +74,7 @@ const ChatBot = () => {
                   }`}
                >
                   <ReactMarkdown>{msg.content}</ReactMarkdown>
-               </p>
+               </div>
             ))}
             {isBotTyping && (
                <div className="flex gap-1 px-3 py-3 bg-gray-200 rounded-xl self-start">
@@ -86,7 +87,6 @@ const ChatBot = () => {
          <form
             onSubmit={handleSubmit(onSubmit)}
             onKeyDown={onKeyDown}
-            ref={formRef}
             className="flex flex-col gap-2 items-end border-2 p-4 rounded-3xl"
          >
             <textarea
@@ -94,6 +94,7 @@ const ChatBot = () => {
                   required: true,
                   validate: (data) => data.trim().length > 0,
                })}
+               autoFocus
                className="w-full border-0 focus:outline-0 resize-none"
                placeholder="Ask me anything..."
                maxLength={1000}

@@ -332,6 +332,40 @@ Error Handling:
 
         提高用户体验和安全性。
 
+4.10 Imporving the look and feel.
+    1. 将输入框push到页面最下面
+        只需要将页面设置成flex vertical container
+        让message 得到所有的空间。
+
+        目前无事发生，因为我们没有指定height。
+        所以我们再增加hight (h-screen)
+
+        但是这种是hard code
+        但有时我们希望它占据一整页
+        有时是 side bar 之类的
+
+        1. 所以应该在外部管控高度，比如app component
+
+        2. 然后在内部的chatBot中我们应该设置高度为h-full 这样就可以让chatBot填充整个外部元素了
+
+        同理 weight也一样，w-2xl也在 app中，然后内部是w-full
+    
+    2. 我们只希望 内容部分滚动，而不是整个页面滚动。
+        但auto scrolling broke了，所以我们加入哨兵<p>更换ref
+
+    3. console中产生了报错，因为p中不能包含ol元素
+        这个问题产生的原因是因为我们的服务器返回的对话是ol，那么前端用p来接受是不合适的
+        所以我们将p更改成为div
+        同时更改哨兵节点类型
+
+    4.用户进入这个页面时，不会自动focus到对话框
+
+    5. copy后如果不更新，rest不会启动
+        给个参数，看prompt是否更新就行
+        reset({prompt: ''});
+
+4.11 Handling error
+
 
 
 
