@@ -179,3 +179,5 @@ Error Handling:
     conversationID需要创建独立Ref，所以要用这个方式创建
     const conversationId = useRef(crypto.randomUUID());
     调用时，使用.current
+
+4.4 rendering the message
