@@ -364,7 +364,12 @@ Error Handling:
         给个参数，看prompt是否更新就行
         reset({prompt: ''});
 
-4.11 Handling error
+4.11 Handling error:
+    现在如果我们的后端服务器坏了，我们无法知道。要解决这个问题，我们可以增加 try Catch和finally
+
+    Try来尝试运行代码块
+    catch是捕捉任何错误
+    finally是在try时，我们有时会设置一些变量，用finally将他们改回默认值
 
 
 

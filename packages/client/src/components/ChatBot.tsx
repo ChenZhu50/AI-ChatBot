@@ -21,6 +21,7 @@ type Message = {
 const ChatBot = () => {
    const [messages, setMessages] = useState<Message[]>([]);
    const [isBotTyping, setIsBotTyping] = useState(false);
+   const [error, setError] = useState<string | null>(null);
    const lastMessageRef = useRef<HTMLDivElement>(null);
    const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
@@ -30,15 +31,26 @@ const ChatBot = () => {
    }, [messages, isBotTyping]);
 
    const onSubmit = async ({ prompt }: FormData) => {
-      setMessages((prev) => [...prev, { role: 'user', content: prompt }]);
-      setIsBotTyping(true);
-      reset({ prompt: '' });
-      const { data } = await axios.post<ChatResponse>('/api/chat', {
-         prompt,
-         conversationId: conversationId.current,
-      });
-      setMessages((prev) => [...prev, { role: 'bot', content: data.message }]);
-      setIsBotTyping(false);
+      try {
+         setMessages((prev) => [...prev, { role: 'user', content: prompt }]);
+         setIsBotTyping(true);
+         setError(null);
+         reset({ prompt: '' });
+         const { data } = await axios.post<ChatResponse>('/api/chat', {
+            prompt,
+            conversationId: conversationId.current,
+         });
+         setMessages((prev) => [
+            ...prev,
+            { role: 'bot', content: data.message },
+         ]);
+         setIsBotTyping(false);
+      } catch (error) {
+         console.error('Error fetching chat response:', error);
+         setError('Failed to get response. Please try again.');
+      } finally {
+         setIsBotTyping(false);
+      }
    };
 
    //when we take this onKeyDown function out
@@ -81,6 +93,14 @@ const ChatBot = () => {
                   <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse"></div>
                   <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse [animation-delay:0.2s]"></div>
                   <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse [animation-delay:0.4s]"></div>
+               </div>
+            )}
+            {error && (
+               <div
+                  className="px-3 py-1 rounded-3xl max-w-[70%] bg-red-200 text-red-800 self-center"
+                  onClick={() => setError(null)}
+               >
+                  {error} (click to dismiss)
                </div>
             )}
          </div>
