@@ -181,3 +181,25 @@ Error Handling:
     调用时，使用.current
 
 4.4 rendering the message
+    要用到useState 变量，记住OpenAI给的回复是string array
+    那么我们setMessage就应该是({...message, prompt})
+
+    我们得到后，用setMessage中继承之前的聊天...message
+    然后加载上,data.message
+
+    我们直接data.message是无法显示出来的，因为ts不知道这个post function返回的data包含什么东西
+        所以我们可以在上面定义一个type叫做chatResponse，然后其中包含一个属性message 类型是string
+
+    我们还需要让我们的message可以显示，所以用shift+contrl+p的方式将之前的代码包含在一个div中
+    
+    然后在这个div的上方，建立一个新的div，其中
+        <div>
+            {message.map((msg, index) => (
+               <p key={index}>{msg}</p>
+            ))}
+         </div>
+    让每个message都可以显示出来，且key就是他们的index
+
+    但是server的response会覆盖，我们之前的回复，因为...message每次都是空的
+
+    所以我们要用arrow function来指定谁是prev

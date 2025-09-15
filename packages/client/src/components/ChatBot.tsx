@@ -57,14 +57,13 @@ const ChatBot = () => {
                className="w-full border-0 focus:outline-0 resize-none"
                placeholder="Ask me anything..."
                maxLength={1000}
+            ></textarea>
+            <Button
+               disabled={!formState.isValid}
+               className="rounded-full w-9 h-9"
             >
-               <Button
-                  disabled={!formState.isValid}
-                  className="rounded-full w-9 h-9"
-               >
-                  <FaArrowUp />
-               </Button>
-            </textarea>
+               <FaArrowUp />
+            </Button>
          </form>
       </div>
    );
