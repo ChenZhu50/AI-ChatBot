@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useRef, type KeyboardEvent, useState } from 'react';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import ReactMarkdown from 'react-markdown';
 import { Button } from './ui/button';
 import { FaArrowUp } from 'react-icons/fa';
 
@@ -55,7 +56,7 @@ const ChatBot = () => {
                         : 'bg-gray-200 text-black self-start rounded-r-3xl rounded-tl-3xl'
                   }`}
                >
-                  {msg.content}
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
                </p>
             ))}
          </div>
