@@ -258,4 +258,27 @@ Error Handling:
     <ReactMarkdown>{msg.content}</ReactMarkdown>
     这样就可以正常显示markdown了
 
+4.7 adding a typing indicator:
+    当我们给一个比较难的问题给服务器的时候，我们会发现，其需要一定时间来给我们反馈。
+    所以我们应该增加一个 bot正在输入的动画，比如三个点，让这三个点间隔0.2秒呈现
+
+    首先用useState 创建一个boolean的变量，叫做isBotTypeing来indicating 是否bot正在输入
+
+    那么这个的判断时间就是，如果我已经发给服务器了，那么bot就是正在输入
+
+    当服务器给我返回结果，就是bot输入结束。
+
+    之后，在第一个div render message的部分我们应该再增加一个判断，是否bot type
+    如果是的话，则显示三个点，代码不长直接写在这里：
+                {isBotTyping && (
+               <div className="flex gap-1 px-3 py-3 bg-gray-200 rounded-xl self-start">
+                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse"></div>
+                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse [animation-delay:0.2s]"></div>
+                  <div className="w-2 h-2 rounded-full bg-gray-800 animate-pulse [animation-delay:0.4s]"></div>
+               </div>
+            )}
+         </div>
+    需要注意的是，因为我们这个判断是被包含在对话这个div中间的，所以我们为了不让三个点的动画占据整个屏幕，应该在这三个点的动画上增加self-start。
+
+
 
