@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRef, type KeyboardEvent, useState } from 'react';
+import { useRef, type KeyboardEvent, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import ReactMarkdown from 'react-markdown';
 import { Button } from './ui/button';
@@ -21,8 +21,13 @@ type Message = {
 const ChatBot = () => {
    const [messages, setMessages] = useState<Message[]>([]);
    const [isBotTyping, setIsBotTyping] = useState(false);
+   const formRef = useRef<HTMLFormElement>(null);
    const conversationId = useRef(crypto.randomUUID());
    const { register, handleSubmit, reset, formState } = useForm<FormData>();
+
+   useEffect(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth' });
+   }, [messages, isBotTyping]);
 
    const onSubmit = async ({ prompt }: FormData) => {
       setMessages((prev) => [...prev, { role: 'user', content: prompt }]);
@@ -41,14 +46,14 @@ const ChatBot = () => {
    //since inside form element, e is for sure a form event
    const onKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
-         handleSubmit(onSubmit)();
          e.preventDefault();
+         handleSubmit(onSubmit)();
       }
    };
 
    return (
       <div>
-         <div className="flex flex-col gap-4 mb-4 max-h-[500px] overflow-y-auto">
+         <div className="flex flex-col gap-4 mb-4">
             {messages.map((msg, index) => (
                <p
                   key={index}
@@ -73,6 +78,7 @@ const ChatBot = () => {
          <form
             onSubmit={handleSubmit(onSubmit)}
             onKeyDown={onKeyDown}
+            ref={formRef}
             className="flex flex-col gap-2 items-end border-2 p-4 rounded-3xl"
          >
             <textarea

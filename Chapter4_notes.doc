@@ -280,5 +280,41 @@ Error Handling:
          </div>
     需要注意的是，因为我们这个判断是被包含在对话这个div中间的，所以我们为了不让三个点的动画占据整个屏幕，应该在这三个点的动画上增加self-start。
 
+4.8: auto_scrolling to the last Message:
+    当我们现在对话超出一页后，不会自动滚动到下一页。所以我们这一节来修改这个问题。
+    
+    我们可以用use effect方法，
+    
+    首先把ref设置成我们的form
+    这个ref就会告诉计算机我们要检查哪个元素是否可见？
+    （
+        在我们的之前代码中，回复处于一个单独的图层中，因为我们有个消息内滚动
+        max-h-[500px] overflow-y-auto
+        所以去除了
+     ）
+
+
+    然后使用useEffct，来检查formRef.current
+    formRef 是通过 useRef<HTMLFormElement>(null) 创建的“引用容器对象”。它长这样：
+
+        { current: null }
+
+
+        一开始 current 是 null。
+
+        ref={formRef} 写在 <form> 元素上以后，React 在组件渲染时会把这个 DOM 节点塞进来：
+
+        formRef.current = <form> 对应的真实 DOM 元素
+
+
+        formRef.current 就表示“当前 React 已经挂到这个 ref 上的实际 DOM 元素”。
+
+        所以 formRef.current?.scrollIntoView(...) 这句的意思就是：
+
+        如果这个 <form> 已经在页面里存在了（即 current 不为 null），就调用它的 scrollIntoView 方法。
+
+
+
+
 
 
