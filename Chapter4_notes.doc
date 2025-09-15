@@ -247,5 +247,15 @@ Error Handling:
         来写你的js code（判断role和决定颜色 和位置）
     }
 
-    同时为了让回复和问题不粘在一起，我们需要flex 和 gap
+    同时为了让回复和问题不粘在一起，我们需要flex 和 gap在之前的div。
+
+
+4.6：Rendering Markdown text:
+    有一些text openAI回复你会是markdown text，所以我们需要正确的mark down格式显示
+    我们要先下载react-markdown的包来帮助我们 然后import
+
+    然后将我们的message包裹在这个
+    <ReactMarkdown>{msg.content}</ReactMarkdown>
+    这样就可以正常显示markdown了
+
 
