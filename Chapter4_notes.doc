@@ -370,6 +370,32 @@ Error Handling:
     Try来尝试运行代码块
     catch是捕捉任何错误
     finally是在try时，我们有时会设置一些变量，用finally将他们改回默认值
+    
+    我们还需要设置出错误后的提示，用useState来更新
+    这就是string和null就可以
+
+    然后catch的话就把报错信息写入error中
+
+    显示的判断逻辑就放在message的动画后面就可以。
+
+    记住，你需要在每次onSubmit的时候制空我们的setError
+
+5.1 Refactoring
+    本章节中 我们将要refactoring我们的前端
+    前端分离并没有标准模板，但是我们应该让其更简洁
+    因此拆分成下面几个块：
+    1. chatInput：管理所有输入的内容
+    2. chatMessage：管理服务器返回内容
+    3. Typing indicator：不属于上面任何一个状态，所以应该单独拆开
+    4. ChatBot：最后的乐高完整拼图
+
+5.2 extracting TypingIndicator component：
+    改的东西并不多，首先我们创建了一个chat文件夹，并把所有跟chat有关的文件都放入了
+    其次我们重复了很多次dot的format，所以可以抽象成一个type，
+    用创建const的方法，手动的添加className。
+    
+    具体方法可以去看TypingIndictor.tsx
+    
 
 
 
