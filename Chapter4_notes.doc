@@ -399,7 +399,7 @@ Error Handling:
 5.3 Extracting chat Message:
     chatMessage内容还挺多的因为其耦合度高
 
-    refac 快捷方式创建一个file
+    rafce 快捷方式创建一个file
 
     1. 先将html那部分抽离出来，直接赋值到chatMessage的return中
     2. import必须的包。
@@ -424,8 +424,30 @@ Error Handling:
 
     const ChatMessage = ({ messages }: Props) => {...}
 
+5.4 Extracting ChatInput component:
+    1.将HTML的部分取出
+    2.formState 部分报错，也拿过来
+        此时你会发现我们没有formData
+        所以也拿过来
+        但formData与源文件名称类似，所以更改成为ChatFormData
+    3. 此时我们来解决onSubmit问题
+        我们不可能把on Submit的方法全部给的form里面
+        因为这与它关系并不大。所以我们只挪动reset
 
+    4. reset form和执行onSubmit方法
+        我们告诉父组件，我们有一个新的prompt进来了
+        所以让父组件告诉我onSubmit要干嘛
+        之后让父组件给我props就行。
 
+    5.对于onKeyDown方法，我们直接复制
+        但记住，你不是调用handleSubmit方法了，而是直接调用这个input function中的submit方法。
+        这样才会刷新你的输入区域。
+    
+    6. 我个人觉得我的error也挺长的，就给它也提取出来了
+        其需要error和setError 我也直接让父组件给我提供了
+
+    总结一下：前端的最顶端代码应该像一个manager一样，把自己的手下（useState）发送到不同的部门中
+    
 
 
 

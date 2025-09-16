@@ -1,15 +1,10 @@
 import axios from 'axios';
-import { useRef, type KeyboardEvent, useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { Button } from '../ui/button';
-import { FaArrowUp } from 'react-icons/fa';
+import { useRef, useState } from 'react';
 import TypingIndicator from './TypingIndicator';
 import type { Message } from './ChatMessage';
 import ChatMessage from './ChatMessage';
-
-type FormData = {
-   prompt: string;
-};
+import ChatInput, { type ChatFormData } from './ChatInput';
+import ChatError from './ChatError';
 
 type ChatResponse = {
    message: string;
@@ -20,14 +15,13 @@ const ChatBot = () => {
    const [isBotTyping, setIsBotTyping] = useState(false);
    const [error, setError] = useState<string | null>(null);
    const conversationId = useRef(crypto.randomUUID());
-   const { register, handleSubmit, reset, formState } = useForm<FormData>();
 
-   const onSubmit = async ({ prompt }: FormData) => {
+   const onSubmit = async ({ prompt }: ChatFormData) => {
       try {
          setMessages((prev) => [...prev, { role: 'user', content: prompt }]);
          setIsBotTyping(true);
          setError(null);
-         reset({ prompt: '' });
+
          const { data } = await axios.post<ChatResponse>('/api/chat', {
             prompt,
             conversationId: conversationId.current,
@@ -45,51 +39,14 @@ const ChatBot = () => {
       }
    };
 
-   //when we take this onKeyDown function out
-   //we need to explicitly say what type is our e
-   //since inside form element, e is for sure a form event
-   const onKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-         e.preventDefault();
-         handleSubmit(onSubmit)();
-      }
-   };
    return (
       <div className="flex flex-col h-full">
          <div className="flex flex-col flex-1 gap-4 mb-4 overflow-y-auto">
             <ChatMessage messages={messages} />
             {isBotTyping && <TypingIndicator />}
-            {error && (
-               <div
-                  className="px-3 py-1 rounded-3xl max-w-[70%] bg-red-200 text-red-800 self-center"
-                  onClick={() => setError(null)}
-               >
-                  {error} (click to dismiss)
-               </div>
-            )}
+            {error && <ChatError error={error} setError={setError} />}
          </div>
-         <form
-            onSubmit={handleSubmit(onSubmit)}
-            onKeyDown={onKeyDown}
-            className="flex flex-col gap-2 items-end border-2 p-4 rounded-3xl"
-         >
-            <textarea
-               {...register('prompt', {
-                  required: true,
-                  validate: (data) => data.trim().length > 0,
-               })}
-               autoFocus
-               className="w-full border-0 focus:outline-0 resize-none"
-               placeholder="Ask me anything..."
-               maxLength={1000}
-            ></textarea>
-            <Button
-               disabled={!formState.isValid}
-               className="rounded-full w-9 h-9"
-            >
-               <FaArrowUp />
-            </Button>
-         </form>
+         <ChatInput onSubmit={onSubmit} />
       </div>
    );
 };
