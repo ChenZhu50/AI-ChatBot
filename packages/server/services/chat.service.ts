@@ -1,10 +1,19 @@
+import fs from 'fs';
+import path from 'path';
 import { conversationRepository } from '../repositories/conversation.repository';
 import OpenAI from 'openai';
+import template from '../prompts/chatbot.txt';
 
 //Implementation detail, so not exported
 const client = new OpenAI({
    apiKey: process.env.OPENAI_API_KEY,
 });
+
+const parkInfo = fs.readFileSync(
+   path.join(__dirname, '..', 'prompts', 'WonderWorld.md'),
+   'utf-8'
+);
+const instruction = template.replace('{{parkInfo}}', parkInfo);
 
 interface ChatResponse {
    id: string;
@@ -14,6 +23,7 @@ interface ChatResponse {
 //public interface
 //leaky abstraction,
 // for example: we are calling output_text at index.ts which let ppl know that we are using openai
+
 export const chatService = {
    sendMessage: async (
       conversationId: string,
@@ -21,6 +31,7 @@ export const chatService = {
    ): Promise<ChatResponse> => {
       const response = await client.responses.create({
          model: 'gpt-4o-mini',
+         instructions: instruction,
          input: prompt,
          temperature: 0.2,
          max_output_tokens: 100,

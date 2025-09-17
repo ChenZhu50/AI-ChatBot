@@ -1,0 +1,21 @@
+Prompt enginerr.
+
+我们要注意输入类型，输出类型，同时要区分我们的prompt应该是one shot，zero shot or few shot。
+
+像是目前的任务，zero shot就可以，其提交方式就是在服务器端创建一个prompt文件夹管理所有prompt内容
+创建txt输入我们需要的prompt，和md格式的需求文档。
+
+需要它回答的部分，用{{——————}} 来占位
+然后在提交给API的地方用
+import fs from 'fs';
+import path from 'path';
+
+const parkInfo = fs.readFileSync(
+   path.join(__dirname, '..', 'prompts', 'WonderWorld.md'),
+   'utf-8'
+);
+const instruction = template.replace('{{parkInfo}}', parkInfo);
+
+更改占位符和读取文件
+
+最后OpenAI的调用方式是增加instructions行来添加prompt。
