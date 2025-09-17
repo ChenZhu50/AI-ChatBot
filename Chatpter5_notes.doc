@@ -19,3 +19,12 @@ const instruction = template.replace('{{parkInfo}}', parkInfo);
 更改占位符和读取文件
 
 最后OpenAI的调用方式是增加instructions行来添加prompt。
+
+
+Add sound effect
+    很简单啊，增加两个声源文件然后放在assets下面的sounds中。
+    在chatBot中使用 const popAudio = new Audio(popSound);
+    的方法创建音源
+    之后再调用其.volum方法降低到20% （0.2）
+
+    在需要调用的位置使用.play就好了。

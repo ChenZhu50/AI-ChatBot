@@ -5,6 +5,13 @@ import type { Message } from './ChatMessage';
 import ChatMessage from './ChatMessage';
 import ChatInput, { type ChatFormData } from './ChatInput';
 import ChatError from './ChatError';
+import popSound from '@/assets/sounds/pop.mp3';
+import notificationSound from '@/assets/sounds/notification.mp3';
+
+const popAudio = new Audio(popSound);
+const notificationAudio = new Audio(notificationSound);
+popAudio.volume = 0.2;
+notificationAudio.volume = 0.2;
 
 type ChatResponse = {
    message: string;
@@ -21,6 +28,7 @@ const ChatBot = () => {
          setMessages((prev) => [...prev, { role: 'user', content: prompt }]);
          setIsBotTyping(true);
          setError(null);
+         popAudio.play();
 
          const { data } = await axios.post<ChatResponse>('/api/chat', {
             prompt,
@@ -31,6 +39,7 @@ const ChatBot = () => {
             { role: 'bot', content: data.message },
          ]);
          setIsBotTyping(false);
+         notificationAudio.play();
       } catch (error) {
          console.error('Error fetching chat response:', error);
          setError('Failed to get response. Please try again.');
