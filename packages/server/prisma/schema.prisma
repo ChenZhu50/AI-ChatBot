@@ -13,3 +13,31 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  reviews     Review[]
+  summary     Summary?
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  author    Int
+  rating    Int
+  content   String
+  createdAt DateTime @default(now())
+  productID Int
+  Product   Product  @relation(fields: [productID], references: [id])
+}
+
+model Summary {
+  id        Int      @id @default(autoincrement())
+  productID Int      @unique
+  content   String
+  Product   Product  @relation(fields: [productID], references: [id])
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
