@@ -104,4 +104,24 @@
     我们发现如果id invalid 我们会得到一个http页面，这样非常confusing，所以增加validation。
 
 2.2 refactoring-sepration of concerns.
+    如同chapter 4中将back end 分层一样。我们也对我们的router进行分层
+    再次复习一下每一层的作用：
+    1. router，接受和发送http请求。
+    2. controller 只接受和验证请求是否合法，传递给下面的组件
+    3. service 处理repository上传上来的信息，和对收集上来的信息进行加工将结果返回给controller
+    4. repository 负责与外界沟通获取数据，将得到数据上传给service
 
+    所以在我们当前的router中 get方法基本只有验证id是否正确，抓取数据
+    所以controller的任务是验证是否是number,下发给service让其干活
+        因为service中请求方法为异步，所以await其返回结果。
+    res.json(reviews)
+
+    在service中，我们要确保接受到的信息类型，所以使用promist
+        这里的类型是Review[]
+    注意要使用async方法，因为抓取数据是异步的
+
+    在repository中我们需要使用可以直接return prisma.review.findMany来看起来更整洁
+        其是唯一一个知道如何与外界沟通的人，所以在这里创建prisma。
+    注意：也需要确保上传为Review[]
+
+    总结：这就好比外联部的人才知道熊猫外卖的电话号，总部经理不需要知道。
