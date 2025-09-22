@@ -1,0 +1,83 @@
+6.1 Setting up prisma
+    一个ORM 可以当一个translater。
+    在server文件夹下使用bun add -d prisma 创建shcema对象的指令
+    之后再跑一个 bun add @prisma/client 这是我们与db交互的窗口
+    再跑一个：bunx prisma init 初始化 prisma
+
+    之后我们在server的prisma文件夹下就会看见 schema.prisma文件
+    修改其中的datasource为
+    datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+    }
+
+    去到env file中创建
+    DATABASE_URL =mysql://root:root的密码@server名称（localhost）：portNumber/databaseName
+
+6.2 Defining the prisma schema
+    创建schema方法很简单
+    使用model 名称{
+        key 类型 @attribute（比如id 也就是primary key）
+    }
+
+    最后类似：
+    model Product {
+    id          Int      @id @default(autoincrement())
+    name        String   @db.VarChar(255)
+    description String?  @db.Text
+    price       Float
+    reviews     Review[] //表示这部分信息你需要去Review这个表中查看
+    summary     Summary? //？表示可要可不要
+
+    @@map("products") //改名
+    }
+
+    model Review {
+    id        Int      @id @default(autoincrement())
+    author    String   @db.VarChar(255)
+    rating    Int      @db.TinyInt
+    content   String   @db.Text
+    createdAt DateTime @default(now())
+    productID Int
+    Product   Product  @relation(fields: [productID], references: [id]) //表示桥键，product这个id来自于product表
+
+    @@map("reviews")
+    }
+
+6.3 DataGrip
+    点击加号，然后选择mySql 对应你的版本（这里是9）
+    告诉他连接方式，按照上面的填写就好。
+
+    然后点击0/6那个选择你的database
+    在db中一般不是大驼峰类型，所以我们需要用@@map的形式改为小写
+
+6.5 refining the prisma
+    有一些不合理的，我们可以用@来重新定义
+    这个可以后面再学一次，按情况使用
+
+    在定义修改后，我们应该再在命令行中使用bunx prisma migrate dev 来创建migration
+    给个新名字就行，这样migrations就会有个新的名字，来与db交流，你点开查看后就会发现一堆SQL语句
+
+    在db refresh就会发现我们的表单更新了
+
+6.6 populating the databaseName with Realistic Data
+
+    直接chatGPT，给 schema 和prompt 
+    我的如下：
+    My Schema is defined as below:
+    ====
+    insert your Schema
+    ===
+    I would like you to provide me with complete SQL script to populate the products and reviews table in MySQL dataBase based on the schema above. 
+    - create 5 products 
+    -for each product, insert 5 realistic customer reviews. 
+    -make sure each review is long and tailored to the product type 
+    - do not include data for the summaries table 
+    - output only the SQL script in Markdown format. No comments or explanations.
+
+    创建完毕后，右键我们的DB，然后点new 然后选择Query Console
+    粘贴我们的SQL
+    用control+A选择全部。然后点击运行。
+
+2.1 Creating the API to fetch review.
+    
