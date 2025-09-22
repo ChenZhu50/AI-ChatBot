@@ -1,5 +1,10 @@
 import type { Review } from '../generated/prisma/index.js';
 import { reviewRepository } from '../repositories/review.repository.js';
+import OpenAI from 'openai';
+
+const client = new OpenAI({
+   apiKey: process.env.OPENAI_API_KEY,
+});
 
 export const reviewService = {
    async getReviews(productId: number): Promise<Review[]> {
@@ -14,6 +19,18 @@ export const reviewService = {
       const joinedReviews = reviews.map((r) => r.content).join('\n\n');
       //send to gpt for summarization
       //for now just hard code it
-      return `Summary of reviews for product ${productId}:\n\n${joinedReviews}`;
+
+      const prompt = `summarize the following reviews in a concise manner, 
+      highlighting key points and overall sentiment:
+      \n\n${joinedReviews}\n\nSummary:`;
+
+      const response = await client.responses.create({
+         model: 'gpt-4o-mini',
+         input: prompt,
+         temperature: 0.2,
+         max_output_tokens: 500,
+      });
+
+      return response.output_text; //later we will replace it with actual call to gpt
    },
 };

@@ -131,3 +131,5 @@
 
 2.4 Generating summaries
     从chat中先抄来
+
+2.5 refactoring-extracing the llm logic
