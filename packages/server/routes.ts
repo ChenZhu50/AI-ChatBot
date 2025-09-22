@@ -1,10 +1,7 @@
 import express from 'express';
 import type { Request, Response } from 'express';
-import dotenv from 'dotenv';
 import { chatController } from './controllers/chat.controller';
-import { Prisma } from './generated/prisma';
-import { PrismaClient } from './generated/prisma';
-import { is } from 'zod/locales';
+import { reviewController } from './controllers/review.controller';
 
 const routes = express.Router();
 
@@ -18,20 +15,11 @@ routes.get('/api/hello', (req: Request, res: Response) => {
 
 routes.post('/api/chat', chatController.sendMessage);
 
-routes.get('/api/products/:id/reviews', async (req: Request, res: Response) => {
-   const prisma = new PrismaClient();
-   const productId = Number(req.params.id);
+routes.get('/api/products/:id/reviews', reviewController.getReviews);
 
-   if (isNaN(productId)) {
-      return res.status(400).json({ error: 'Invalid product ID' });
-   }
-
-   const reviews = await prisma.review.findMany({
-      where: { productID: productId },
-      orderBy: { createdAt: 'desc' },
-   });
-
-   res.json(reviews);
-});
+routes.post(
+   '/api/products/:id/reviews/summarize',
+   reviewController.summarizeReviews
+);
 
 export default routes; //since this the only object in this file, we can use default export

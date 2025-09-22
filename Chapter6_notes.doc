@@ -125,3 +125,9 @@
     注意：也需要确保上传为Review[]
 
     总结：这就好比外联部的人才知道熊猫外卖的电话号，总部经理不需要知道。
+
+2.3 Creating an API for summarizing reviews
+    让控制出只出10个review and combine在一起成为一个long String
+
+2.4 Generating summaries
+    从chat中先抄来
