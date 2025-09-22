@@ -80,4 +80,28 @@
     用control+A选择全部。然后点击运行。
 
 2.1 Creating the API to fetch review.
+    从DB中获取评价
+    首先去到router.ts中写入一个get请求 请求端口如下：/api/products/:id/reviews 前端应给我们传入product id
+    使用prismaClient 获取全部的reviews关于这个product
     
+    我们应该import是 generated/prisma 因为这个Client每次都会重新加载当我们修改我们的 schema.
+
+    从url中读取我们的id，使用req.params方法 （假设valid）
+
+    使用prisma.reviwe.findMany来获取review
+     where:{ProductID}
+
+     这等于 SELECT * FROM reviews WHERE productID = @ProductID
+
+     还有更多的选项可以加入，比如orderBY之类的
+
+    findMany return 一个 promist，所以需要await call 然后将request handler换成async
+
+    将结果返回给review
+
+    然后用res.json来看一下结果，用postman
+
+    我们发现如果id invalid 我们会得到一个http页面，这样非常confusing，所以增加validation。
+
+2.2 refactoring-sepration of concerns.
+
