@@ -133,3 +133,4 @@
     从chat中先抄来
 
 2.5 refactoring-extracing the llm logic
+    server 下面再建立一个llm文件夹管理我们如何与服务器链接，这样如果后面选择不用open AI了，我们只需要改这里就好了
