@@ -134,3 +134,8 @@
 
 2.5 refactoring-extracing the llm logic
     server 下面再建立一个llm文件夹管理我们如何与服务器链接，这样如果后面选择不用open AI了，我们只需要改这里就好了
+
+2.6 refactoring extracing the prompt
+    方法如同之前的公园一样，用placehoder和join 方法来加入prompt
+
+2.7 storing the Summary 

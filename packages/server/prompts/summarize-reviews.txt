@@ -1,0 +1,4 @@
+summarize the following reviews in a concise manner, 
+    highlighting key points and overall sentiment:
+      
+{{reviews}}
