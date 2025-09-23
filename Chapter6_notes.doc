@@ -139,3 +139,13 @@
     方法如同之前的公园一样，用placehoder和join 方法来加入prompt
 
 2.7 storing the Summary 
+    post 方法
+
+2.8 handling regeneration
+    如果不过期就直接调用之前的就好，没必要再调用api，省钱。
+
+2.9 handling edge case
+    不能只想着happy path
+    1. 如果不是numeric呢？
+    2. 如果是numerical 但是 不合法呢？
+    3. 如果 valid，但是没有review呢？

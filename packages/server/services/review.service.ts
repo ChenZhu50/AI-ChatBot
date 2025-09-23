@@ -9,6 +9,14 @@ export const reviewService = {
    },
 
    async summarizeReviews(productId: number): Promise<string> {
+      //check if we have a recent summary in the db
+      const existingSummary =
+         await reviewRepository.getReviewSummary(productId);
+
+      if (existingSummary && existingSummary.expiresAt > new Date()) {
+         return existingSummary.content;
+      }
+
       //get last 10 reviews for the product(cuz 1000 maybe too much for gpt/ most recent is enough)
       const reviews = await reviewRepository.getReviews(productId, 10);
 
