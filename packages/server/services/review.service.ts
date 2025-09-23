@@ -26,6 +26,11 @@ export const reviewService = {
          maxTokens: 500,
       });
 
-      return response.text;
+      //store the summary in the db with an expiration date of 7 days from now
+      const summary = response.text;
+
+      await reviewRepository.storeReviewSummary(productId, summary);
+
+      return summary;
    },
 };
