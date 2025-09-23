@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import StartRating from './StartRating';
 
 type Props = {
    productId: number;
@@ -37,7 +38,9 @@ const ReviewList = ({ productId }: Props) => {
          {reviews?.reviews.map((review) => (
             <div key={review.id}>
                <div className="font-semibold">{review.author}</div>
-               <div>Rating: {review.rating}/5</div>
+               <div>
+                  <StartRating value={review.rating} />
+               </div>
                <div>{review.content}</div>
                <div>
                   Reviewed on: {new Date(review.createdAt).toLocaleDateString()}
