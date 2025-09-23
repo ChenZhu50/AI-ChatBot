@@ -29,9 +29,12 @@ export const reviewRepository = {
       });
    },
 
-   getReviewSummary(productId: number) {
-      return prisma.summary.findUnique({
-         where: { productID: productId },
+   async getReviewSummary(productId: number): Promise<string | null> {
+      const summary = await prisma.summary.findFirst({
+         where: {
+            AND: [{ productID: productId }, { expiresAt: { gt: new Date() } }],
+         },
       });
+      return summary ? summary.content : null;
    },
 };

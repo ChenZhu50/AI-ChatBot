@@ -4,17 +4,13 @@ import { reviewRepository } from '../repositories/review.repository.js';
 import template from '../prompts/summarize-reviews.txt';
 
 export const reviewService = {
-   async getReviews(productId: number): Promise<Review[]> {
-      return reviewRepository.getReviews(productId);
-   },
-
    async summarizeReviews(productId: number): Promise<string> {
       //check if we have a recent summary in the db
       const existingSummary =
          await reviewRepository.getReviewSummary(productId);
 
-      if (existingSummary && existingSummary.expiresAt > new Date()) {
-         return existingSummary.content;
+      if (existingSummary) {
+         return existingSummary;
       }
 
       //get last 10 reviews for the product(cuz 1000 maybe too much for gpt/ most recent is enough)
